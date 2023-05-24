@@ -16,8 +16,8 @@ class MainActivity : AppCompatActivity() {
         comicsViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
 
         val text = findViewById<TextView>(R.id.title_main)
-        comicsViewModel.comics.observe(this) {
-            text.text = comicsViewModel.comics.value?.get(0)?.title ?: "No data"
+        comicsViewModel.comicsByTitle.observe(this) {
+            text.text = comicsViewModel.comicsByTitle.value?.getOrNull(0)?.title ?: "No data"
         }
     }
 }

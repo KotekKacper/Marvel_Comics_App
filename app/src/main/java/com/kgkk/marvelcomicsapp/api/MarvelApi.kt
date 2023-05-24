@@ -14,4 +14,15 @@ interface MarvelApi {
         @Query("offset") offset: Int = Constants.OFFSET,
         @Query("orderBy") orderBy: String = Constants.ORDERBY
     ): Response<ApiResponse>
+
+    @GET("/v1/public/comics")
+    suspend fun getComicsByTitle(
+        @Query("title") title: String,
+        @Query("ts") timestamp: String = Constants.TIMESTAMP,
+        @Query("apikey") apiKey: String = Constants.APIKEY,
+        @Query("hash") hash: String = Constants.HASH,
+        @Query("limit") limit: Int = Constants.LIMIT,
+        @Query("offset") offset: Int = Constants.OFFSET,
+        @Query("orderBy") orderBy: String = Constants.ORDERBY
+    ): Response<ApiResponse>
 }

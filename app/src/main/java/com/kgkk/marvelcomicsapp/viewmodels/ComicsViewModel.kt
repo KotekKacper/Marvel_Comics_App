@@ -14,15 +14,36 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class ComicsViewModel: ViewModel() {
+    private val marvelApi: MarvelApi by lazy {
+        RetrofitHelper.getInstance().create(MarvelApi::class.java)
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     val comics: MutableLiveData<List<Comic>> by lazy {
-        val marvelApi = RetrofitHelper.getInstance().create(MarvelApi::class.java)
         val comicsLiveData = MutableLiveData<List<Comic>>()
 
         // get comic list in the background
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val result = marvelApi.getComics()
+                val comics = convertResponseToModel(result)
+                comicsLiveData.postValue(comics)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        comicsLiveData
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    val comicsByTitle: MutableLiveData<List<Comic>> by lazy {
+        val comicsLiveData = MutableLiveData<List<Comic>>()
+
+        // get comic list in the background
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val result = marvelApi.getComicsByTitle(title = "captain")
                 val comics = convertResponseToModel(result)
                 comicsLiveData.postValue(comics)
             } catch (e: Exception) {
