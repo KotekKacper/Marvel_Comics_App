@@ -1,15 +1,17 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.MarvelComicsApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.MarvelComicsApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/grey</item>
-        <item name="colorPrimaryVariant">@color/dark_grey</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/light_grey</item>
+        <item name="colorOnPrimary">@color/dark_grey</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/orange</item>
         <item name="colorSecondaryVariant">@color/dark_orange</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Custom colors. -->
+        <item name="searchBarTint">@color/dirty_white</item>
     </style>
 </resources>

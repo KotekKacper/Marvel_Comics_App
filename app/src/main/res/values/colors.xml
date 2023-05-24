@@ -7,4 +7,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#FFCF485C</color>
     <color name="dark_orange">#973544</color>
+    <color name="dirty_white">#FFEEEEEE</color>
 </resources>
