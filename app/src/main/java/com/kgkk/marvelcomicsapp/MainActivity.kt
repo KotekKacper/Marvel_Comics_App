@@ -1,23 +1,26 @@
 package com.kgkk.marvelcomicsapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
-import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.kgkk.marvelcomicsapp.databinding.ActivityMainBinding
+
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var comicsViewModel: ComicsViewModel
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        comicsViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val text = findViewById<TextView>(R.id.title_main)
-        comicsViewModel.comicsByTitle.observe(this) {
-            text.text = comicsViewModel.comicsByTitle.value?.getOrNull(0)?.title ?: "No data"
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        navController = navHostFragment.navController
+
+        binding.navView.setupWithNavController(navController)
     }
 }
