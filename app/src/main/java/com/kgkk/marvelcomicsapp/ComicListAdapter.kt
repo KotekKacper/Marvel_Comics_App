@@ -42,9 +42,9 @@ class ComicListAdapter (private var comics: List<Comic>
         val cardView = holder.cardView
         val comic = comics[position]
 
+        val imageView = cardView.findViewById<ImageView>(R.id.comic_image)
         Log.d("ImageUrl", comic.imageUrl.toString())
         if (comic.imageUrl != null) {
-            val imageView = cardView.findViewById<ImageView>(R.id.comic_image)
             Glide.with(cardView.context)
                 .load(comic.imageUrl)
                 .into(imageView)
@@ -57,6 +57,13 @@ class ComicListAdapter (private var comics: List<Comic>
         authorTextView.text = comic.authors.getOrNull(0)?.name ?: ""
 
         val descTextView = cardView.findViewById<TextView>(R.id.comic_short_desc)
+        // Set the number of lines to display in the description
+        imageView.post {
+            val imageHeight: Int = imageView.height
+            val combinedLineHeight: Int = titleTextView.lineHeight*titleTextView.lineCount + authorTextView.lineHeight*authorTextView.lineCount
+            val maxLines: Int = (imageHeight - combinedLineHeight) / descTextView.lineHeight
+            descTextView.maxLines = maxLines - 2
+        }
         descTextView.text = comic.description
 
         cardView.setOnClickListener {
