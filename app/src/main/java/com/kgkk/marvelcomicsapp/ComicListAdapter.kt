@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
 
 class ComicListAdapter (private var comics: List<Comic>
@@ -54,7 +55,8 @@ class ComicListAdapter (private var comics: List<Comic>
         titleTextView.text = comic.title
 
         val authorTextView = cardView.findViewById<TextView>(R.id.comic_author)
-        authorTextView.text = comic.authors.getOrNull(0)?.name ?: ""
+
+        authorTextView.text = getWriterText(comic.authors)
 
         val descTextView = cardView.findViewById<TextView>(R.id.comic_short_desc)
         // Set the number of lines to display in the description
@@ -73,6 +75,22 @@ class ComicListAdapter (private var comics: List<Comic>
 
     override fun getItemCount(): Int {
         return comics.size
+    }
+
+    private fun getWriterText(authors: List<Author>): String {
+        val writers = ArrayList<String>()
+        for (author in authors) {
+            val role = author.role
+            val name = author.name
+            if (role.lowercase() == "writer") {
+                writers.add(name)
+            }
+        }
+        return if (writers.size == 0) {
+            ""
+        } else {
+            "written by " + writers.joinToString(", ")
+        }
     }
 
 }
