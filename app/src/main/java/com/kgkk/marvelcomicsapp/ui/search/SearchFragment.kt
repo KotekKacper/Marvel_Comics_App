@@ -1,5 +1,6 @@
 package com.kgkk.marvelcomicsapp.ui.search
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kgkk.marvelcomicsapp.ComicListAdapter
+import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentSearchBinding
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
@@ -34,7 +36,15 @@ class SearchFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         comicViewModel.comicsByTitle.observe(viewLifecycleOwner) { comics ->
-            adapter.setData(comics)
+            if (comics.isNotEmpty()) {
+                adapter.setData(comics)
+                binding.iconTextView.visibility = View.GONE
+            } else {
+                adapter.setData(comics)
+                binding.iconTextView.text =
+                    getString(R.string.no_results_text, binding.searchView.query)
+                binding.iconTextView.visibility = View.VISIBLE
+            }
         }
 
         comicViewModel.loadingState.observe(viewLifecycleOwner) { isLoading ->
@@ -44,6 +54,8 @@ class SearchFragment : Fragment() {
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                // Clear the screen
+                binding.iconTextView.visibility = View.GONE
                 // Perform the search
                 comicViewModel.searchComicsByTitle(query)
                 return true
