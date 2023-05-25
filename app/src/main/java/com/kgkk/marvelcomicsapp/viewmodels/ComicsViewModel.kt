@@ -54,6 +54,19 @@ class ComicsViewModel: ViewModel() {
         comicsLiveData
     }
 
+    fun searchComicsByTitle(title: String) {
+        // get comic list in the background
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val result = marvelApi.getComicsByTitle(title)
+                val comics = convertResponseToModel(result)
+                comicsByTitle.postValue(comics)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     private fun convertResponseToModel(response: Response<ApiResponse>): List<Comic> {
         return response.body()?.data?.results?.map { result ->
             val authors = result.creators.items.map { item ->
