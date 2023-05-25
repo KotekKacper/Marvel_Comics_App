@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.databinding.FragmentHomeBinding
+import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
 class HomeFragment : Fragment() {
 
@@ -20,16 +22,23 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        val homeViewModel =
+            ViewModelProvider(this).get(HomeViewModel::class.java)
+
+        val comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
+
+        // Inflate the layout and initialize the RecyclerView and its adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ComicListAdapter(emptyList())
+        binding.recyclerView.adapter = adapter
+
+        comicViewModel.comics.observe(viewLifecycleOwner) { comics ->
+            adapter.setData(comics)
         }
+
         return root
     }
 
