@@ -25,9 +25,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         val comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
 
         // Inflate the layout and initialize the RecyclerView and its adapter
@@ -37,6 +34,11 @@ class HomeFragment : Fragment() {
 
         comicViewModel.comics.observe(viewLifecycleOwner) { comics ->
             adapter.setData(comics)
+        }
+
+        comicViewModel.loadingState.observe(viewLifecycleOwner) { isLoading ->
+            // Show or hide the loading indicator based on the loading state
+            binding.progressContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
         return root
