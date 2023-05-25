@@ -3,6 +3,7 @@ package com.kgkk.marvelcomicsapp
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -44,6 +45,10 @@ class ComicListAdapter (private var comics: List<Comic>
         val comic = comics[position]
 
         val imageView = cardView.findViewById<ImageView>(R.id.comic_image)
+        val titleTextView = cardView.findViewById<TextView>(R.id.comic_title)
+        val authorTextView = cardView.findViewById<TextView>(R.id.comic_author)
+        val descTextView = cardView.findViewById<TextView>(R.id.comic_short_desc)
+
         Log.d("ImageUrl", comic.imageUrl.toString())
         if (comic.imageUrl != null) {
             Glide.with(cardView.context)
@@ -51,22 +56,19 @@ class ComicListAdapter (private var comics: List<Comic>
                 .into(imageView)
         }
 
-        val titleTextView = cardView.findViewById<TextView>(R.id.comic_title)
         titleTextView.text = comic.title
-
-        val authorTextView = cardView.findViewById<TextView>(R.id.comic_author)
 
         authorTextView.text = getWriterText(comic.authors)
 
-        val descTextView = cardView.findViewById<TextView>(R.id.comic_short_desc)
-        // Set the number of lines to display in the description
-        imageView.post {
+        // When image loading is complete, update the description TextView
+        updateUIWhenImageLoaded(imageView) {
             val imageHeight: Int = imageView.height
-            val combinedLineHeight: Int = titleTextView.lineHeight*titleTextView.lineCount + authorTextView.lineHeight*authorTextView.lineCount
+            val combinedLineHeight: Int =
+                titleTextView.lineHeight * titleTextView.lineCount + authorTextView.lineHeight * authorTextView.lineCount
             val maxLines: Int = (imageHeight - combinedLineHeight) / descTextView.lineHeight
             descTextView.maxLines = maxLines - 2
+            descTextView.text = comic.description
         }
-        descTextView.text = comic.description
 
         cardView.setOnClickListener {
             listener?.onClick(position)
@@ -91,6 +93,19 @@ class ComicListAdapter (private var comics: List<Comic>
         } else {
             "written by " + writers.joinToString(", ")
         }
+    }
+
+    private fun updateUIWhenImageLoaded(imageView: ImageView, callback: () -> Unit) {
+        imageView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                // Check if the image is loaded
+                if (imageView.drawable != null) {
+                    imageView.viewTreeObserver.removeOnPreDrawListener(this)
+                    callback() // Invoke the callback function when the image is loaded
+                }
+                return true
+            }
+        })
     }
 
 }
