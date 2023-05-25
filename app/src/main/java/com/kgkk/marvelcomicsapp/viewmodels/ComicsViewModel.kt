@@ -43,7 +43,7 @@ class ComicsViewModel: ViewModel() {
         // get comic list in the background
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val result = marvelApi.getComicsByTitle(title = "captain")
+                val result = marvelApi.getComicsByTitle(title = "america")
                 val comics = convertResponseToModel(result)
                 comicsLiveData.postValue(comics)
             } catch (e: Exception) {

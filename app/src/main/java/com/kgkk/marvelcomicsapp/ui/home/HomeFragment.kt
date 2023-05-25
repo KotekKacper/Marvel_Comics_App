@@ -25,9 +25,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         val comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
 
         // Inflate the layout and initialize the RecyclerView and its adapter

@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.databinding.FragmentSearchBinding
+import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
 class SearchFragment : Fragment() {
 
@@ -20,16 +22,20 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(SerachViewModel::class.java)
-
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        val comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
+
+        // Inflate the layout and initialize the RecyclerView and its adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ComicListAdapter(emptyList())
+        binding.recyclerView.adapter = adapter
+
+        comicViewModel.comicsByTitle.observe(viewLifecycleOwner) { comics ->
+            adapter.setData(comics)
         }
+
         return root
     }
 
