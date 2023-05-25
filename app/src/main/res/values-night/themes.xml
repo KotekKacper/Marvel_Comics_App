@@ -11,5 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Custom colors. -->
+        <item name="searchBarTint">@color/dirty_white</item>
     </style>
 </resources>

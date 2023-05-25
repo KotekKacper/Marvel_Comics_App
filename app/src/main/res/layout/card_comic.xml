@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_comic"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.kgkk.marvelcomicsapp.utils.ScaledImageView
+            android:id="@+id/comic_image"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/card_image" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/comic_title"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_gravity="start"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/comic_author"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_gravity="start"
+                android:textColor="@color/light_grey" />
+
+            <TextView
+                android:id="@+id/comic_short_desc"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:maxLines="5"
+                android:ellipsize="end"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_gravity="start" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
