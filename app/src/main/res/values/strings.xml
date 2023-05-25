@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Marvel Comics App</string>
+    <string name="app_name">Marvel Comics</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="search_hint">Search for a comic book</string>
 </resources>
