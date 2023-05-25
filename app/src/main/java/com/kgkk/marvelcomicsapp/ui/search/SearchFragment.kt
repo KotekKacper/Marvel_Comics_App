@@ -37,6 +37,11 @@ class SearchFragment : Fragment() {
             adapter.setData(comics)
         }
 
+        comicViewModel.loadingState.observe(viewLifecycleOwner) { isLoading ->
+            // Show or hide the loading indicator based on the loading state
+            binding.progressContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // Perform the search

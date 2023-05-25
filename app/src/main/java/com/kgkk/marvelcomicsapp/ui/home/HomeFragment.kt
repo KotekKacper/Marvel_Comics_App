@@ -36,6 +36,11 @@ class HomeFragment : Fragment() {
             adapter.setData(comics)
         }
 
+        comicViewModel.loadingState.observe(viewLifecycleOwner) { isLoading ->
+            // Show or hide the loading indicator based on the loading state
+            binding.progressContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         return root
     }
 
