@@ -37,14 +37,10 @@ class DetailsFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true) // Show the back button
             setDisplayShowHomeEnabled(true) // Show the back button as an icon
-            title = getString(R.string.details_title) // Set the title
-            setDisplayShowTitleEnabled(true) // Show the title
         }
         toolbar.setNavigationOnClickListener {
             findNavController().navigateUp() // Handle back button click
         }
-
-
         return root
     }
 }
