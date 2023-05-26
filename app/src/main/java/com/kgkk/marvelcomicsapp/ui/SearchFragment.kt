@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.R
@@ -35,6 +37,16 @@ class SearchFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ComicListAdapter(emptyList())
         binding.recyclerView.adapter = adapter
+
+        // Setup for details screen
+        adapter.setListener(object : ComicListAdapter.Listener {
+            override fun onClick(position: Int) {
+                view?.findNavController()?.navigate(R.id.navigation_details, bundleOf(
+                    "position" to position, "screen" to "search"
+                )
+                )
+            }
+        })
 
         comicViewModel.comicsByTitle.observe(viewLifecycleOwner) { comics ->
             if (comics.isNotEmpty()) {
