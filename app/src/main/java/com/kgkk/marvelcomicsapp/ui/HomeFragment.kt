@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentHomeBinding
+import com.kgkk.marvelcomicsapp.models.Comic
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
+import java.io.ByteArrayOutputStream
+import java.io.ObjectOutputStream
 
 class HomeFragment : Fragment() {
 
@@ -38,11 +41,15 @@ class HomeFragment : Fragment() {
         // Setup for details screen
         adapter.setListener(object : ComicListAdapter.Listener {
             override fun onClick(position: Int) {
-                view?.findNavController()?.navigate(R.id.navigation_details, bundleOf(
-                    "position" to position, "screen" to "home"
-                ))
+                val comic = comicViewModel.comics.value?.get(position)
+                val bundle = Bundle().apply {
+                    putByteArray("comic", comic?.let { serializeComic(it) })
+                    putString("screen", "home")
+                }
+                view?.findNavController()?.navigate(R.id.navigation_details, bundle)
             }
         })
+
 
         comicViewModel.comics.observe(viewLifecycleOwner) { comics ->
             adapter.setData(comics)
@@ -54,6 +61,14 @@ class HomeFragment : Fragment() {
         }
 
         return root
+    }
+
+    private fun serializeComic(comic: Comic): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        val objectOutputStream = ObjectOutputStream(outputStream)
+        objectOutputStream.writeObject(comic)
+        objectOutputStream.close()
+        return outputStream.toByteArray()
     }
 
     override fun onDestroyView() {

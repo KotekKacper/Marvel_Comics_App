@@ -1,5 +1,7 @@
 package com.kgkk.marvelcomicsapp.models
 
+import java.io.Serializable
+
 data class Comic(
     val id: Long,
     val title: String,
@@ -7,4 +9,5 @@ data class Comic(
     val description: String?,
     val imageUrl: String?,
     val url: String
-)
+) : Serializable
+
