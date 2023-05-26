@@ -1,19 +1,15 @@
 package com.kgkk.marvelcomicsapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.kgkk.marvelcomicsapp.databinding.FragmentDetailsBinding
 import com.kgkk.marvelcomicsapp.models.Comic
-import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
-import java.io.ByteArrayInputStream
-import java.io.ObjectInputStream
+import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 
 class DetailsFragment : Fragment() {
 
@@ -24,7 +20,8 @@ class DetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        comic = deserializeComic(requireArguments().getByteArray("comic"))
+        val serializer = ComicSerialization()
+        comic = serializer.deserializeComic(requireArguments().getByteArray("comic"))
     }
 
     override fun onCreateView(
@@ -54,16 +51,5 @@ class DetailsFragment : Fragment() {
         binding.comicTitle.text = comic?.title
         binding.comicAuthor.text = comic?.authors.toString()
         binding.comicDescription.text = comic?.description
-    }
-
-    private fun deserializeComic(byteArray: ByteArray?): Comic? {
-        byteArray?.let {
-            val inputStream = ByteArrayInputStream(it)
-            val objectInputStream = ObjectInputStream(inputStream)
-            val comic = objectInputStream.readObject() as? Comic
-            objectInputStream.close()
-            return comic
-        }
-        return null
     }
 }

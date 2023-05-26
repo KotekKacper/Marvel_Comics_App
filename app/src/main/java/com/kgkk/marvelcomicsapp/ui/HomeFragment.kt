@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -12,10 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentHomeBinding
-import com.kgkk.marvelcomicsapp.models.Comic
+import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
-import java.io.ByteArrayOutputStream
-import java.io.ObjectOutputStream
 
 class HomeFragment : Fragment() {
 
@@ -38,18 +35,17 @@ class HomeFragment : Fragment() {
         val adapter = ComicListAdapter(emptyList())
         binding.recyclerView.adapter = adapter
 
+        val serializer = ComicSerialization()
         // Setup for details screen
         adapter.setListener(object : ComicListAdapter.Listener {
             override fun onClick(position: Int) {
                 val comic = comicViewModel.comics.value?.get(position)
                 val bundle = Bundle().apply {
-                    putByteArray("comic", comic?.let { serializeComic(it) })
-                    putString("screen", "home")
+                    putByteArray("comic", comic?.let { serializer.serializeComic(it) })
                 }
                 view?.findNavController()?.navigate(R.id.navigation_details, bundle)
             }
         })
-
 
         comicViewModel.comics.observe(viewLifecycleOwner) { comics ->
             adapter.setData(comics)
@@ -61,14 +57,6 @@ class HomeFragment : Fragment() {
         }
 
         return root
-    }
-
-    private fun serializeComic(comic: Comic): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        val objectOutputStream = ObjectOutputStream(outputStream)
-        objectOutputStream.writeObject(comic)
-        objectOutputStream.close()
-        return outputStream.toByteArray()
     }
 
     override fun onDestroyView() {
