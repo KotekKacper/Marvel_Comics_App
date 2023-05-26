@@ -7,11 +7,11 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.kgkk.marvelcomicsapp.ui.home.HomeFragment"
+        android:name="com.kgkk.marvelcomicsapp.ui.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.kgkk.marvelcomicsapp.ui.search.SearchFragment"
+        android:name="com.kgkk.marvelcomicsapp.ui.SearchFragment"
         tools:layout="@layout/fragment_search" />
 </navigation>

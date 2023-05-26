@@ -1,4 +1,4 @@
-package com.kgkk.marvelcomicsapp.ui.home
+package com.kgkk.marvelcomicsapp.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

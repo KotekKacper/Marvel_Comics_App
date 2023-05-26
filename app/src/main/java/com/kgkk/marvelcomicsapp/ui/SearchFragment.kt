@@ -1,7 +1,6 @@
-package com.kgkk.marvelcomicsapp.ui.search
+package com.kgkk.marvelcomicsapp.ui
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

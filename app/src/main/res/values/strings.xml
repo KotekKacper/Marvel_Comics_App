@@ -5,4 +5,6 @@
     <string name="card_image">Comic image</string>
     <string name="search_icon_text">Start typing to find particular comics.</string>
     <string name="no_results_text">There is not comic book %s in our library. Check the spelling and try again.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
