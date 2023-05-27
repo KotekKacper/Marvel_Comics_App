@@ -8,13 +8,14 @@ import com.kgkk.marvelcomicsapp.api.MarvelApi
 import com.kgkk.marvelcomicsapp.api.RetrofitHelper
 import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
+import com.kgkk.marvelcomicsapp.utils.Constants
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class ComicsViewModel: ViewModel() {
+class ComicsViewModel : ViewModel() {
     private val marvelApi: MarvelApi by lazy {
         RetrofitHelper.getInstance().create(MarvelApi::class.java)
     }
@@ -65,12 +66,20 @@ class ComicsViewModel: ViewModel() {
             val authors = result.creators.items.map { item ->
                 Author(item.role, item.name)
             }
+            val chosenImageUrl =
+                if (result.thumbnail.path == Constants.IMG_NOT_AVAILABLE_URL
+                    && result.images.isNotEmpty()) {
+                    "${result.images[0].path}.${result.images[0].extension}"
+                } else {
+                    "${result.thumbnail.path}.${result.thumbnail.extension}"
+                }
+
             Comic(
                 result.id,
                 result.title,
                 authors,
                 result.textObjects.getOrNull(0)?.text,
-                "${result.thumbnail.path}.${result.thumbnail.extension}",
+                chosenImageUrl,
                 result.urls[0].url
             )
         } ?: emptyList()

@@ -8,6 +8,7 @@ object Constants {
     const val LIMIT = 25
     const val OFFSET = 0
     const val ORDERBY = "-onsaleDate"
+    const val IMG_NOT_AVAILABLE_URL = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"
 //    Author categories
     val authorRoles = listOf("writer", "penciller", "cover artist")
 }
