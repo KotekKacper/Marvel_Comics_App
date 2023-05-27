@@ -78,10 +78,15 @@ class ComicsViewModel : ViewModel() {
                 result.id,
                 result.title,
                 authors,
-                result.textObjects.getOrNull(0)?.text,
+                result.textObjects.getOrNull(0)?.text?.let { removeHtmlTagsAndFixLineBreaks(it) },
                 chosenImageUrl,
                 result.urls[0].url
             )
         } ?: emptyList()
+    }
+
+    private fun removeHtmlTagsAndFixLineBreaks(htmlString: String): String {
+        // Replace <br> tags with line breaks
+        return htmlString.replace("\n", "").replace("<br>", "\n")
     }
 }
