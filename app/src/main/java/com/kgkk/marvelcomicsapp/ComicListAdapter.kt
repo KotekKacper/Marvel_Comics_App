@@ -66,7 +66,13 @@ class ComicListAdapter (private var comics: List<Comic>
                 titleTextView.lineHeight * titleTextView.lineCount + authorTextView.lineHeight * authorTextView.lineCount
             val maxLines: Int = (imageHeight - combinedLineHeight) / descTextView.lineHeight
             descTextView.maxLines = maxLines - 2
-            descTextView.text = comics[position].description
+            try {
+                descTextView.text = comics[holder.adapterPosition].description
+            } catch (e: ArrayIndexOutOfBoundsException) {
+                Log.e("Description height", "Couldn't update the height")
+                Log.e("Error displayed", e.toString())
+            }
+
         }
 
         cardView.setOnClickListener {
