@@ -1,33 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.DetailsFragment">
-
-    <Button
-        android:id="@+id/link_button"
-        android:layout_width="match_parent"
-        android:layout_height="50sp"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="16dp"
-        android:text="@string/find_out_more"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSecondary"
-        android:background="@drawable/link_button_shape"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
-        android:gravity="center"
-        android:clickable="true"
-        android:elevation="6dp" />
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:orientation="vertical"
-        android:theme="@style/Theme.MarvelComicsApp">
+        android:elevation="10dp"
+        android:theme="@style/Theme.MarvelComicsApp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -35,20 +22,19 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <TextView
+                android:id="@+id/center_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/details_title"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:id="@+id/center_text" />
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/Theme.MarvelComicsApp"
-                app:layout_collapseMode="pin" />
+                android:theme="@style/Theme.MarvelComicsApp" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -56,75 +42,80 @@
 
     <ImageView
         android:id="@+id/comic_image"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:contentDescription="@string/comic_image"
         android:scaleType="centerCrop"
-        android:contentDescription="@string/comic_image" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/motion_drawer"
-        app:layoutDescription="@xml/motion_slideup_drawer"
-        tools:showPaths="true"
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layoutDescription="@xml/motion_slideup_drawer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        tools:showPaths="true">
 
-        <androidx.cardview.widget.CardView
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/comicCardView"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="200sp"
-            card_view:cardElevation="2dp"
-            card_view:cardCornerRadius="10dp">
+            card_view:cardCornerRadius="10dp"
+            card_view:cardElevation="2dp">
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_height="wrap_content"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:padding="16dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <View
                     android:layout_width="50dp"
                     android:layout_height="4dp"
-                    android:layout_marginBottom="20dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
                     android:background="?attr/colorPrimaryVariant" />
 
                 <TextView
                     android:id="@+id/comic_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:layout_marginStart="4dp"
                     android:layout_marginBottom="4dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="start"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/comic_author"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:layout_marginStart="4dp"
                     android:layout_marginBottom="4dp"
-                    android:textSize="12sp"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="start"
-                    android:textColor="@color/light_grey" />
+                    android:maxLines="1"
+                    android:textColor="@color/light_grey"
+                    android:textSize="12sp" />
 
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="70sp">
+
                     <TextView
                         android:id="@+id/comic_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
                         android:layout_marginStart="4dp"
                         android:layout_marginBottom="4dp"
-                        android:textSize="15sp"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="start" />
+                        android:textSize="15sp" />
                 </ScrollView>
 
             </LinearLayout>
@@ -133,4 +124,22 @@
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <Button
+        android:id="@+id/link_button"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_margin="16dp"
+        android:text="@string/find_out_more"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnSecondary"
+        android:background="@drawable/link_button_shape"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:clickable="true"
+        android:elevation="6dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

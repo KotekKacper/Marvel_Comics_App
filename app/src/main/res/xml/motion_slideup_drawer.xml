@@ -16,7 +16,7 @@
         <Constraint
             android:id="@+id/comicCardView"
             android:layout_width="match_parent"
-            android:layout_height="200sp"
+            android:layout_height="150sp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent" />
@@ -26,7 +26,7 @@
         <Constraint
             android:id="@+id/comicCardView"
             android:layout_width="match_parent"
-            android:layout_height="500sp"
+            android:layout_height="match_parent"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent" />
