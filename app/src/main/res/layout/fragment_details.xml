@@ -79,7 +79,7 @@
                     android:layout_height="4dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="20dp"
-                    android:background="?attr/colorPrimaryVariant" />
+                    android:background="?attr/colorHandleBar" />
 
                 <TextView
                     android:id="@+id/comic_title"

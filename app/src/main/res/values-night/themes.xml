@@ -13,5 +13,6 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Custom colors. -->
         <item name="searchBarTint">@color/dark_grey</item>
+        <item name="colorHandleBar">@color/light_grey</item>
     </style>
 </resources>
