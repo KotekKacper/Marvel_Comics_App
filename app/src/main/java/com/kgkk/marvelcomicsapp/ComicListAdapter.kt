@@ -12,8 +12,9 @@ import com.bumptech.glide.Glide
 import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
 
-class ComicListAdapter (private var comics: List<Comic>
-): RecyclerView.Adapter<ComicListAdapter.ViewHolder>() {
+class ComicListAdapter(
+    private var comics: List<Comic>
+) : RecyclerView.Adapter<ComicListAdapter.ViewHolder>() {
 
     private var listener: Listener? = null
 
@@ -30,7 +31,7 @@ class ComicListAdapter (private var comics: List<Comic>
         notifyDataSetChanged()
     }
 
-    class ViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView) {
         var cardView: CardView = itemView
     }
 
@@ -51,9 +52,7 @@ class ComicListAdapter (private var comics: List<Comic>
 
         Log.d("ImageUrl", comic.imageUrl.toString())
         if (comic.imageUrl != null) {
-            Glide.with(cardView.context)
-                .load(comic.imageUrl)
-                .into(imageView)
+            Glide.with(cardView.context).load(comic.imageUrl).into(imageView)
         }
 
         titleTextView.text = comic.title
@@ -69,10 +68,9 @@ class ComicListAdapter (private var comics: List<Comic>
             try {
                 descTextView.text = comics[holder.adapterPosition].description
             } catch (e: ArrayIndexOutOfBoundsException) {
-                Log.e("Description height", "Couldn't update the height")
-                Log.e("Error displayed", e.toString())
+                Log.d("Description height", "Couldn't update the height")
+                Log.d("Error displayed", e.toString())
             }
-
         }
 
         cardView.setOnClickListener {
@@ -101,7 +99,8 @@ class ComicListAdapter (private var comics: List<Comic>
     }
 
     private fun updateUIWhenImageLoaded(imageView: ImageView, callback: () -> Unit) {
-        imageView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        imageView.viewTreeObserver.addOnPreDrawListener(object :
+            ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 // Check if the image is loaded
                 if (imageView.drawable != null) {

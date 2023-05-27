@@ -15,6 +15,7 @@ import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentSearchBinding
 import com.kgkk.marvelcomicsapp.utils.ComicSerialization
+import com.kgkk.marvelcomicsapp.utils.Constants
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
 class SearchFragment : Fragment() {
@@ -39,17 +40,20 @@ class SearchFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         val serializer = ComicSerialization()
-        // Setup for details screen
+        // Passing data and redirection to details screen
         adapter.setListener(object : ComicListAdapter.Listener {
             override fun onClick(position: Int) {
                 val comic = comicViewModel.comicsByTitle.value?.get(position)
                 val bundle = Bundle().apply {
-                    putByteArray("comic", comic?.let { serializer.serializeComic(it) })
+                    putByteArray(
+                        Constants.COMIC_OBJ_KEY,
+                        comic?.let { serializer.serializeComic(it) })
                 }
                 view?.findNavController()?.navigate(R.id.navigation_details, bundle)
             }
         })
 
+        // Showing recycler view or message if list is empty
         comicViewModel.comicsByTitle.observe(viewLifecycleOwner) { comics ->
             if (comics.isNotEmpty()) {
                 adapter.setData(comics)
@@ -74,7 +78,8 @@ class SearchFragment : Fragment() {
                 // Perform the search
                 comicViewModel.searchComicsByTitle(query)
                 // Close the keyboard
-                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm =
+                    context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
                 return true
             }

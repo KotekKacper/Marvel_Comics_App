@@ -27,7 +27,8 @@ class DetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val serializer = ComicSerialization()
-        comic = serializer.deserializeComic(requireArguments().getByteArray("comic"))
+        comic =
+            serializer.deserializeComic(requireArguments().getByteArray(Constants.COMIC_OBJ_KEY))
     }
 
     override fun onCreateView(
@@ -49,7 +50,7 @@ class DetailsFragment : Fragment() {
             findNavController().navigateUp() // Handle back button click
         }
 
-        // redirect to website
+        // Redirect to website on click
         binding.linkButton.setOnClickListener {
             val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(comic?.url))
             startActivity(viewIntent)
@@ -60,7 +61,7 @@ class DetailsFragment : Fragment() {
         return root
     }
 
-    private fun setContent(){
+    private fun setContent() {
         binding.comicTitle.text = comic?.title
         binding.comicAuthor.text = getAuthorsSorted(comic)
         binding.comicDescription.text = comic?.description
@@ -89,13 +90,15 @@ class DetailsFragment : Fragment() {
         return authors
             ?.filter { author ->
                 val role = author.role.lowercase()
-                role.startsWith(roleSearch) || (roleSearch == "" && !Constants.authorRoles.contains(role))
+                role.startsWith(roleSearch) || (roleSearch == "" && !Constants.authorRoles.contains(
+                    role
+                ))
             }
             ?.map { it.name }
             ?: emptyList()
     }
 
-    fun <T> removeDuplicates(list: List<T>): List<T> {
+    private fun <T> removeDuplicates(list: List<T>): List<T> {
         val set = LinkedHashSet<T>()
         val result = mutableListOf<T>()
         for (element in list) {

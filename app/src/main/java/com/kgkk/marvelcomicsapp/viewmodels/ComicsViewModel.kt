@@ -19,15 +19,24 @@ class ComicsViewModel : ViewModel() {
     private val marvelApi: MarvelApi by lazy {
         RetrofitHelper.getInstance().create(MarvelApi::class.java)
     }
+
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean> = _loadingState
 
-    @OptIn(DelicateCoroutinesApi::class)
     val comics: MutableLiveData<List<Comic>> by lazy {
         val comicsLiveData = MutableLiveData<List<Comic>>()
         _loadingState.value = true
+        loadComics(marvelApi, _loadingState, comicsLiveData)
+        comicsLiveData
+    }
+    val comicsByTitle = MutableLiveData<List<Comic>>()
 
-        // get comic list in the background
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun loadComics(
+        marvelApi: MarvelApi,
+        loadingState: MutableLiveData<Boolean>,
+        comicsLiveData: MutableLiveData<List<Comic>>
+    ) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val result = marvelApi.getComics()
@@ -36,14 +45,10 @@ class ComicsViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                _loadingState.postValue(false)
+                loadingState.postValue(false)
             }
         }
-
-        comicsLiveData
     }
-
-    val comicsByTitle = MutableLiveData<List<Comic>>()
 
     @OptIn(DelicateCoroutinesApi::class)
     fun searchComicsByTitle(title: String) {
@@ -68,7 +73,8 @@ class ComicsViewModel : ViewModel() {
             }
             val chosenImageUrl =
                 if (result.thumbnail.path == Constants.IMG_NOT_AVAILABLE_URL
-                    && result.images.isNotEmpty()) {
+                    && result.images.isNotEmpty()
+                ) {
                     "${result.images[0].path}.${result.images[0].extension}"
                 } else {
                     "${result.thumbnail.path}.${result.thumbnail.extension}"
