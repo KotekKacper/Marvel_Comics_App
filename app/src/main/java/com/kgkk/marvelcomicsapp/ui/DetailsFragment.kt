@@ -3,7 +3,6 @@ package com.kgkk.marvelcomicsapp.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.kgkk.marvelcomicsapp.databinding.FragmentDetailsBinding
+import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
 import com.kgkk.marvelcomicsapp.utils.ComicSerialization
+import com.kgkk.marvelcomicsapp.utils.Constants
 
 
 class DetailsFragment : Fragment() {
@@ -49,7 +50,6 @@ class DetailsFragment : Fragment() {
 
         // redirect to website
         binding.linkButton.setOnClickListener {
-            Log.d("Button", "button clicked")
             val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(comic?.url))
             startActivity(viewIntent)
         }
@@ -61,12 +61,47 @@ class DetailsFragment : Fragment() {
 
     private fun setContent(){
         binding.comicTitle.text = comic?.title
-        binding.comicAuthor.text = comic?.authors.toString()
+        binding.comicAuthor.text = getAuthorsSorted(comic)
         binding.comicDescription.text = comic?.description
         if (comic?.imageUrl != null) {
             Glide.with(binding.root.context)
                 .load(comic?.imageUrl)
                 .into(binding.comicImage)
         }
+    }
+
+    private fun getAuthorsSorted(comic: Comic?): String {
+        val sortedAuthors = Constants.authorRoles
+            .flatMap { role -> getAuthorsByRole(comic?.authors, role) }
+        val allAuthorsWithDuplicates = (sortedAuthors + getAuthorsByRole(comic?.authors, ""))
+            .toMutableList()
+        val allAuthors = removeDuplicates(allAuthorsWithDuplicates)
+
+        return if (allAuthors.isEmpty()) {
+            ""
+        } else {
+            allAuthors.joinToString(", ")
+        }
+    }
+
+    private fun getAuthorsByRole(authors: List<Author>?, roleSearch: String): List<String> {
+        return authors
+            ?.filter { author ->
+                val role = author.role.lowercase()
+                role.startsWith(roleSearch) || (roleSearch == "" && !Constants.authorRoles.contains(role))
+            }
+            ?.map { it.name }
+            ?: emptyList()
+    }
+
+    fun <T> removeDuplicates(list: List<T>): List<T> {
+        val set = LinkedHashSet<T>()
+        val result = mutableListOf<T>()
+        for (element in list) {
+            if (set.add(element)) {
+                result.add(element)
+            }
+        }
+        return result
     }
 }
