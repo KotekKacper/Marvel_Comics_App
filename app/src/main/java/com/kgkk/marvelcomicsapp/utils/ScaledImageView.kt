@@ -23,7 +23,7 @@ class ScaledImageView : AppCompatImageView {
     }
 
     private val aspectRatio: Float
-        private get() {
+        get() {
             if (drawable != null) {
                 val imageWidth = drawable.intrinsicWidth
                 val imageHeight = drawable.intrinsicHeight
