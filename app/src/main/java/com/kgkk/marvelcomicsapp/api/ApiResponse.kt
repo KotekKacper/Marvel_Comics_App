@@ -18,6 +18,7 @@ data class ComicResults(
     val title: String,
     val urls: List<Url>,
     val thumbnail: Thumbnail,
+    val images: List<Thumbnail>,
     val creators: Creators,
     val textObjects: List<Description>
 )

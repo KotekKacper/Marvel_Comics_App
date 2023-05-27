@@ -1,5 +1,6 @@
 package com.kgkk.marvelcomicsapp.api
 
+import com.kgkk.marvelcomicsapp.utils.Constants
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

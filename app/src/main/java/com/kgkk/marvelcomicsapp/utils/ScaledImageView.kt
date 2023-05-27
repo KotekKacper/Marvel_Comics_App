@@ -6,16 +6,14 @@ import androidx.appcompat.widget.AppCompatImageView
 
 
 class ScaledImageView : AppCompatImageView {
-    constructor(context: Context?) : super(context!!) {}
+    constructor(context: Context?) : super(context!!)
     constructor(context: Context?, attrs: AttributeSet?) : super(
         context!!, attrs
-    ) {
-    }
+    )
 
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
         context!!, attrs, defStyle
-    ) {
-    }
+    )
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -25,7 +23,7 @@ class ScaledImageView : AppCompatImageView {
     }
 
     private val aspectRatio: Float
-        private get() {
+        get() {
             if (drawable != null) {
                 val imageWidth = drawable.intrinsicWidth
                 val imageHeight = drawable.intrinsicHeight

@@ -57,17 +57,16 @@ class ComicListAdapter (private var comics: List<Comic>
         }
 
         titleTextView.text = comic.title
-
         authorTextView.text = getWriterText(comic.authors)
 
-        // When image loading is complete, update the description TextView
+        // When image loading is complete, update the description TextView height
         updateUIWhenImageLoaded(imageView) {
             val imageHeight: Int = imageView.height
             val combinedLineHeight: Int =
                 titleTextView.lineHeight * titleTextView.lineCount + authorTextView.lineHeight * authorTextView.lineCount
             val maxLines: Int = (imageHeight - combinedLineHeight) / descTextView.lineHeight
             descTextView.maxLines = maxLines - 2
-            descTextView.text = comic.description
+            descTextView.text = comics[position].description
         }
 
         cardView.setOnClickListener {

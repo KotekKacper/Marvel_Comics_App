@@ -1,4 +1,4 @@
-package com.kgkk.marvelcomicsapp.ui.home
+package com.kgkk.marvelcomicsapp.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,16 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kgkk.marvelcomicsapp.ComicListAdapter
+import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentHomeBinding
+import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
     private val binding get() = _binding!!
+    private lateinit var comicViewModel: ComicsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,12 +28,24 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
+        comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
 
         // Inflate the layout and initialize the RecyclerView and its adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ComicListAdapter(emptyList())
         binding.recyclerView.adapter = adapter
+
+        val serializer = ComicSerialization()
+        // Setup for details screen
+        adapter.setListener(object : ComicListAdapter.Listener {
+            override fun onClick(position: Int) {
+                val comic = comicViewModel.comics.value?.get(position)
+                val bundle = Bundle().apply {
+                    putByteArray("comic", comic?.let { serializer.serializeComic(it) })
+                }
+                view?.findNavController()?.navigate(R.id.navigation_details, bundle)
+            }
+        })
 
         comicViewModel.comics.observe(viewLifecycleOwner) { comics ->
             adapter.setData(comics)

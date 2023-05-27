@@ -1,3 +1,5 @@
 package com.kgkk.marvelcomicsapp.models
 
-data class Author(val role: String, val name: String)
+import java.io.Serializable
+
+data class Author(val role: String, val name: String): Serializable

@@ -1,7 +1,6 @@
-package com.kgkk.marvelcomicsapp.ui.search
+package com.kgkk.marvelcomicsapp.ui
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentSearchBinding
+import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
 class SearchFragment : Fragment() {
@@ -36,6 +37,18 @@ class SearchFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ComicListAdapter(emptyList())
         binding.recyclerView.adapter = adapter
+
+        val serializer = ComicSerialization()
+        // Setup for details screen
+        adapter.setListener(object : ComicListAdapter.Listener {
+            override fun onClick(position: Int) {
+                val comic = comicViewModel.comicsByTitle.value?.get(position)
+                val bundle = Bundle().apply {
+                    putByteArray("comic", comic?.let { serializer.serializeComic(it) })
+                }
+                view?.findNavController()?.navigate(R.id.navigation_details, bundle)
+            }
+        })
 
         comicViewModel.comicsByTitle.observe(viewLifecycleOwner) { comics ->
             if (comics.isNotEmpty()) {

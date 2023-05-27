@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">Marvel Comics</string>
-    <string name="title_activity_main">Marvel Comics</string>
     <string name="search_hint">Search for a comic book</string>
     <string name="card_image">Comic image</string>
     <string name="search_icon_text">Start typing to find particular comics.</string>
     <string name="no_results_text">There is not comic book %s in our library. Check the spelling and try again.</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="go_back">Go back</string>
+    <string name="details_title">Details</string>
+    <string name="comic_image">Comic image</string>
+    <string name="link_to_webpage">Link to webpage</string>
+    <string name="find_out_more">Find out more</string>
 </resources>
