@@ -84,6 +84,13 @@
                 android:padding="16dp"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="50dp"
+                    android:layout_height="4dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="?attr/colorPrimaryVariant" />
+
                 <TextView
                     android:id="@+id/comic_title"
                     android:layout_marginStart="4dp"
