@@ -3,7 +3,6 @@ package com.kgkk.marvelcomicsapp
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -57,21 +56,7 @@ class ComicListAdapter(
 
         titleTextView.text = comic.title
         authorTextView.text = getWriterText(comic.authors)
-
-        // When image loading is complete, update the description TextView height
-        updateUIWhenImageLoaded(imageView) {
-            val imageHeight: Int = imageView.height
-            val combinedLineHeight: Int =
-                titleTextView.lineHeight * titleTextView.lineCount + authorTextView.lineHeight * authorTextView.lineCount
-            val maxLines: Int = (imageHeight - combinedLineHeight) / descTextView.lineHeight
-            descTextView.maxLines = maxLines - 2
-            try {
-                descTextView.text = comics[holder.adapterPosition].description
-            } catch (e: ArrayIndexOutOfBoundsException) {
-                Log.d("Description height", "Couldn't update the height")
-                Log.d("Error displayed", e.toString())
-            }
-        }
+        descTextView.text = comic.description
 
         cardView.setOnClickListener {
             listener?.onClick(position)
@@ -96,20 +81,6 @@ class ComicListAdapter(
         } else {
             "written by " + writers.joinToString(", ")
         }
-    }
-
-    private fun updateUIWhenImageLoaded(imageView: ImageView, callback: () -> Unit) {
-        imageView.viewTreeObserver.addOnPreDrawListener(object :
-            ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                // Check if the image is loaded
-                if (imageView.drawable != null) {
-                    imageView.viewTreeObserver.removeOnPreDrawListener(this)
-                    callback() // Invoke the callback function when the image is loaded
-                }
-                return true
-            }
-        })
     }
 
 }
