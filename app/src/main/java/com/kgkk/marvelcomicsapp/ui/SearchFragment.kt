@@ -49,7 +49,7 @@ class SearchFragment : Fragment() {
                         Constants.COMIC_OBJ_KEY,
                         comic?.let { serializer.serializeComic(it) })
                 }
-                view?.findNavController()?.navigate(R.id.navigation_details, bundle)
+                view?.findNavController()?.navigate(R.id.navigation_details_search, bundle)
             }
         })
 

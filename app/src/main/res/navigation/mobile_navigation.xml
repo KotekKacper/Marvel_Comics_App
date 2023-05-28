@@ -5,19 +5,27 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.kgkk.marvelcomicsapp.ui.HomeFragment"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/navigation_search"
-        android:name="com.kgkk.marvelcomicsapp.ui.SearchFragment"
-        tools:layout="@layout/fragment_search" />
-
-    <fragment
-        android:id="@+id/navigation_details"
-        android:name="com.kgkk.marvelcomicsapp.ui.DetailsFragment"
-        tools:layout="@layout/fragment_details" />
+    <navigation android:id="@+id/navigation_home"
+        app:startDestination="@id/navigation_main_home">
+        <fragment
+            android:id="@+id/navigation_main_home"
+            android:name="com.kgkk.marvelcomicsapp.ui.HomeFragment"
+            tools:layout="@layout/fragment_home"/>
+        <fragment
+            android:id="@+id/navigation_details_home"
+            android:name="com.kgkk.marvelcomicsapp.ui.DetailsFragment"
+            tools:layout="@layout/fragment_details" />
+    </navigation>
+    <navigation android:id="@+id/navigation_search"
+        app:startDestination="@id/navigation_main_search">
+        <fragment
+            android:id="@+id/navigation_main_search"
+            android:name="com.kgkk.marvelcomicsapp.ui.SearchFragment"
+            tools:layout="@layout/fragment_search"/>
+        <fragment
+            android:id="@+id/navigation_details_search"
+            android:name="com.kgkk.marvelcomicsapp.ui.DetailsFragment"
+            tools:layout="@layout/fragment_details" />
+    </navigation>
 
 </navigation>
