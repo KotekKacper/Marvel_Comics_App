@@ -12,6 +12,7 @@ import com.kgkk.marvelcomicsapp.ComicListAdapter
 import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentHomeBinding
 import com.kgkk.marvelcomicsapp.utils.ComicSerialization
+import com.kgkk.marvelcomicsapp.utils.Constants
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
 class HomeFragment : Fragment() {
@@ -30,20 +31,22 @@ class HomeFragment : Fragment() {
 
         comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
 
-        // Inflate the layout and initialize the RecyclerView and its adapter
+        // Inflate the layout and initialize the RecyclerView and it's adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ComicListAdapter(emptyList())
         binding.recyclerView.adapter = adapter
 
         val serializer = ComicSerialization()
-        // Setup for details screen
+        // Passing data and redirection to details screen
         adapter.setListener(object : ComicListAdapter.Listener {
             override fun onClick(position: Int) {
                 val comic = comicViewModel.comics.value?.get(position)
                 val bundle = Bundle().apply {
-                    putByteArray("comic", comic?.let { serializer.serializeComic(it) })
+                    putByteArray(
+                        Constants.COMIC_OBJ_KEY,
+                        comic?.let { serializer.serializeComic(it) })
                 }
-                view?.findNavController()?.navigate(R.id.navigation_details, bundle)
+                view?.findNavController()?.navigate(R.id.navigation_details_home, bundle)
             }
         })
 
