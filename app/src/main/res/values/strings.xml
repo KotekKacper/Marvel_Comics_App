@@ -15,4 +15,7 @@
     <string name="login">Sign in / Sign up</string>
     <string name="logout">Log out</string>
     <string name="username_text">Not logged in</string>
+    <string name="log_out_text">Logged out</string>
+    <string name="log_in_text">Logged in</string>
+    <string name="log_in_failed_text">Login failed</string>
 </resources>

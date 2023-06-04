@@ -50,20 +50,37 @@ class SavedFragment : Fragment() {
 
         comicViewModel.currentUser.observe(viewLifecycleOwner) {
             binding.username.text = comicViewModel.currentUser.value?.email ?: getString(R.string.username_text)
-        }
 
-        binding.login.setOnClickListener {
-            // Choose authentication providers
-            val providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build()
-            )
-            // Create and launch sign-in intent
-            val signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setTheme(R.style.Theme_MarvelComicsApp)
-                .build()
-            signInLauncher.launch(signInIntent)
+            if (comicViewModel.currentUser.value != null) {     // user is logged in
+                binding.login.text = getString(R.string.logout)
+
+                binding.login.setOnClickListener {
+                    // sign out
+                    this.context?.let { it1 ->
+                        AuthUI.getInstance()
+                            .signOut(it1)
+                    }?.addOnCompleteListener {
+                        comicViewModel.currentUser.value = FirebaseAuth.getInstance().currentUser
+                        Toast.makeText(this.context, getString(R.string.log_out_text), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {                                            // user isn't logged in
+                binding.login.text = getString(R.string.login)
+
+                binding.login.setOnClickListener {
+                    // Choose authentication providers
+                    val providers = arrayListOf(
+                        AuthUI.IdpConfig.EmailBuilder().build()
+                    )
+                    // Create and launch sign-in intent
+                    val signInIntent = AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setTheme(R.style.Theme_MarvelComicsApp)
+                        .build()
+                    signInLauncher.launch(signInIntent)
+                }
+            }
         }
 
         val serializer = ComicSerialization()
@@ -93,15 +110,14 @@ class SavedFragment : Fragment() {
     }
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
-            Toast.makeText(this.context, "Logged in", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.context, getString(R.string.log_in_text), Toast.LENGTH_SHORT).show()
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
-            Toast.makeText(this.context, "Login failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.context, getString(R.string.log_in_failed_text), Toast.LENGTH_SHORT).show()
         }
         comicViewModel.currentUser.value = FirebaseAuth.getInstance().currentUser
     }
