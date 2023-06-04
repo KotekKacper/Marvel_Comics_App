@@ -3,7 +3,6 @@ package com.kgkk.marvelcomicsapp.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentDetailsBinding
 import com.kgkk.marvelcomicsapp.models.Author
@@ -63,6 +61,11 @@ class DetailsFragment : Fragment() {
         binding.linkButton.setOnClickListener {
             val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(comic?.url))
             startActivity(viewIntent)
+        }
+
+        comic?.let { comicViewModel.runIfComicSaved(it.id) {
+            binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange))
+            }
         }
 
         // Save the comic

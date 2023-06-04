@@ -64,6 +64,24 @@ class ComicsViewModel : ViewModel() {
         }
     }
 
+    fun runIfComicSaved(comicId: Long, lambdaFunction: () -> Unit) {
+        val query = comicsCollection
+            .whereEqualTo("id", comicId)
+            .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid)
+
+        query.get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    // Comic with the given ID and user ID does not exist
+                    // Execute the lambda function
+                    lambdaFunction()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.i("Firebase", exception.toString())
+            }
+    }
+
 
     fun addComic(comic: Comic) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
