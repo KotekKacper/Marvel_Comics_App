@@ -3,24 +3,31 @@ package com.kgkk.marvelcomicsapp.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentDetailsBinding
 import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
 import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 import com.kgkk.marvelcomicsapp.utils.Constants
+import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
 
 
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var comicViewModel: ComicsViewModel
 
     private var comic: Comic? = null
 
@@ -38,6 +45,8 @@ class DetailsFragment : Fragment() {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
+
         // Set up the toolbar
         val toolbar = binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
@@ -54,6 +63,12 @@ class DetailsFragment : Fragment() {
         binding.linkButton.setOnClickListener {
             val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(comic?.url))
             startActivity(viewIntent)
+        }
+
+        // Save the comic
+        binding.bookmark.setOnClickListener {
+            comic?.let { it1 -> addComic(it1) }
+            binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange))
         }
 
         setContent()
@@ -107,5 +122,29 @@ class DetailsFragment : Fragment() {
             }
         }
         return result
+    }
+
+    fun addComic(comic: Comic) {
+        val comicData = mapOf(
+            "id" to comic.id,
+            "title" to comic.title,
+            "authors" to comic.authors.map { mapOf("role" to it.role, "name" to it.name) },
+            "description" to comic.description,
+            "imageUrl" to comic.imageUrl,
+            "url" to comic.url,
+            "userId" to FirebaseAuth.getInstance().currentUser?.uid // Add the userId field
+        )
+
+        comicViewModel.comicsCollection.add(comicData)
+            .addOnSuccessListener { documentReference ->
+                // Comic added successfully
+                val comicId = documentReference.id
+                // Perform any additional actions or UI updates
+                Log.i("Firebase", comicId)
+            }
+            .addOnFailureListener { exception ->
+                // Handle the error
+                Log.i("Firebase", exception.toString())
+            }
     }
 }

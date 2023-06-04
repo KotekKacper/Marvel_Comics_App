@@ -1,10 +1,12 @@
 package com.kgkk.marvelcomicsapp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kgkk.marvelcomicsapp.api.ApiResponse
 import com.kgkk.marvelcomicsapp.api.MarvelApi
 import com.kgkk.marvelcomicsapp.api.RetrofitHelper
@@ -23,6 +25,9 @@ class ComicsViewModel : ViewModel() {
             value = FirebaseAuth.getInstance().currentUser
         }
     }
+
+    private val db = FirebaseFirestore.getInstance()
+    val comicsCollection = db.collection("comics")
 
     private val marvelApi: MarvelApi by lazy {
         RetrofitHelper.getInstance().create(MarvelApi::class.java)
@@ -59,8 +64,32 @@ class ComicsViewModel : ViewModel() {
         }
     }
 
-    fun loadSavedComics() {
+    fun getUserComics() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
 
+        if (userId != null) {
+            val comicsCollection = FirebaseFirestore.getInstance().collection("comics")
+            val query = comicsCollection.whereEqualTo("userId", userId)
+
+            query.get()
+                .addOnSuccessListener { querySnapshot ->
+                    val comics = mutableListOf<Comic>()
+
+                    for (documentSnapshot in querySnapshot.documents) {
+                        val comic = documentSnapshot.toObject(Comic::class.java)
+                        comic?.let { comics.add(it) }
+                    }
+
+                    comicsSaved.postValue(comics)
+                    Log.d("Firebase", "Comics saved")
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("Firebase", exception.toString())
+                }
+        } else {
+            // User is not authenticated
+            Log.d("Firebase", "User is not authenticated")
+        }
     }
 
     @OptIn(DelicateCoroutinesApi::class)

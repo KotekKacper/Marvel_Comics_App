@@ -9,5 +9,7 @@ data class Comic(
     val description: String?,
     val imageUrl: String?,
     val url: String
-) : Serializable
+) : Serializable {
+    constructor() : this(0, "", emptyList(), null, null, "")
+}
 

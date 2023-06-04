@@ -18,4 +18,5 @@
     <string name="log_out_text">Logged out</string>
     <string name="log_in_text">Logged in</string>
     <string name="log_in_failed_text">Login failed</string>
+    <string name="bookmark_icon">Bookmark icon</string>
 </resources>

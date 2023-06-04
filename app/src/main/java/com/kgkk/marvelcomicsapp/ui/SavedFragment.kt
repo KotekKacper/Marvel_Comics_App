@@ -83,11 +83,13 @@ class SavedFragment : Fragment() {
             }
         }
 
+        comicViewModel.getUserComics()
+
         val serializer = ComicSerialization()
         // Passing data and redirection to details screen
         adapter.setListener(object : ComicListAdapter.Listener {
             override fun onClick(position: Int) {
-                val comic = comicViewModel.comics.value?.get(position)
+                val comic = comicViewModel.comicsSaved.value?.get(position)
                 val bundle = Bundle().apply {
                     putByteArray(
                         Constants.COMIC_OBJ_KEY,
@@ -97,7 +99,7 @@ class SavedFragment : Fragment() {
             }
         })
 
-        comicViewModel.comics.observe(viewLifecycleOwner) { comics ->
+        comicViewModel.comicsSaved.observe(viewLifecycleOwner) { comics ->
             adapter.setData(comics)
         }
 
