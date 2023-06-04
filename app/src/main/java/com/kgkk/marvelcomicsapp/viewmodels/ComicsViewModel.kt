@@ -64,7 +64,7 @@ class ComicsViewModel : ViewModel() {
         }
     }
 
-    fun runIfComicSaved(comicId: Long, lambdaFunction: () -> Unit) {
+    fun runIfComicSaved(comicId: Long, negativeLambdaFunction: () -> Unit, lambdaFunction: () -> Unit) {
         val query = comicsCollection
             .whereEqualTo("id", comicId)
             .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid)
@@ -72,9 +72,10 @@ class ComicsViewModel : ViewModel() {
         query.get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
-                    // Comic with the given ID and user ID does not exist
-                    // Execute the lambda function
+                    // Comic with the given ID and user ID does exist
                     lambdaFunction()
+                } else {
+                    negativeLambdaFunction()
                 }
             }
             .addOnFailureListener { exception ->
@@ -112,10 +113,9 @@ class ComicsViewModel : ViewModel() {
                             // Comic added successfully
                             val comicId = documentReference.id
                             // Perform any additional actions or UI updates
-                            Log.i("Firebase", comicId)
+                            Log.i("Firebase", "$comicId added successfully")
                         }
                         .addOnFailureListener { exception ->
-                            // Handle the error
                             Log.i("Firebase", exception.toString())
                         }
                 }
@@ -124,6 +124,30 @@ class ComicsViewModel : ViewModel() {
                 Log.i("Firebase", exception.toString())
             }
     }
+
+    fun removeComic(comicId: Long) {
+        val query = comicsCollection
+            .whereEqualTo("id", comicId)
+            .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid)
+
+        query.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (documentSnapshot in querySnapshot) {
+                    documentSnapshot.reference.delete()
+                        .addOnSuccessListener {
+                            // Comics removed successfully
+                            Log.i("Firebase", "$comicId removed successfully")
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.i("Firebase", exception.toString())
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.i("Firebase", exception.toString())
+            }
+    }
+
 
     fun getUserComics() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid

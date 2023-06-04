@@ -63,20 +63,32 @@ class DetailsFragment : Fragment() {
             startActivity(viewIntent)
         }
 
-        comic?.let { comicViewModel.runIfComicSaved(it.id) {
-            binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange))
-            }
-        }
-
-        // Save the comic
-        binding.bookmark.setOnClickListener {
-            comic?.let { it1 -> comicViewModel.addComic(it1) }
-            binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange))
-        }
+        comic?.let { comicViewModel.runIfComicSaved(it.id,
+            { setBookmarkComicNotSaved() }, { setBookmarkComicSaved() }) }
 
         setContent()
 
         return root
+    }
+
+    private fun setBookmarkComicSaved() {
+        binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange))
+        binding.bookmark.visibility = View.VISIBLE
+        // Remove the comic from saved
+        binding.bookmark.setOnClickListener {
+            comic?.let { it1 -> comicViewModel.removeComic(it1.id) }
+            setBookmarkComicNotSaved()
+        }
+    }
+
+    private fun setBookmarkComicNotSaved() {
+        binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.grey))
+        binding.bookmark.visibility = View.VISIBLE
+        // Save the comic
+        binding.bookmark.setOnClickListener {
+            comic?.let { it1 -> comicViewModel.addComic(it1) }
+            setBookmarkComicSaved()
+        }
     }
 
     private fun setContent() {
