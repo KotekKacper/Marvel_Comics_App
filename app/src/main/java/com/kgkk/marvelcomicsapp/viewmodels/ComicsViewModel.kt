@@ -64,6 +64,49 @@ class ComicsViewModel : ViewModel() {
         }
     }
 
+
+    fun addComic(comic: Comic) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        val query = comicsCollection
+            .whereEqualTo("id", comic.id)
+            .whereEqualTo("userId", userId)
+
+        query.get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    // Comic with the given ID and user ID exists
+                    Log.d("Firebase", "Comic already saved")
+                } else {
+                    // Comic with the given ID and user ID does not exist
+                    val comicData = mapOf(
+                        "id" to comic.id,
+                        "title" to comic.title,
+                        "authors" to comic.authors.map { mapOf("role" to it.role, "name" to it.name) },
+                        "description" to comic.description,
+                        "imageUrl" to comic.imageUrl,
+                        "url" to comic.url,
+                        "userId" to userId
+                    )
+
+                    comicsCollection.add(comicData)
+                        .addOnSuccessListener { documentReference ->
+                            // Comic added successfully
+                            val comicId = documentReference.id
+                            // Perform any additional actions or UI updates
+                            Log.i("Firebase", comicId)
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle the error
+                            Log.i("Firebase", exception.toString())
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.i("Firebase", exception.toString())
+            }
+    }
+
     fun getUserComics() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 

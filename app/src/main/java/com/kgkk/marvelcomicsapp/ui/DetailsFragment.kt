@@ -67,7 +67,7 @@ class DetailsFragment : Fragment() {
 
         // Save the comic
         binding.bookmark.setOnClickListener {
-            comic?.let { it1 -> addComic(it1) }
+            comic?.let { it1 -> comicViewModel.addComic(it1) }
             binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange))
         }
 
@@ -122,29 +122,5 @@ class DetailsFragment : Fragment() {
             }
         }
         return result
-    }
-
-    fun addComic(comic: Comic) {
-        val comicData = mapOf(
-            "id" to comic.id,
-            "title" to comic.title,
-            "authors" to comic.authors.map { mapOf("role" to it.role, "name" to it.name) },
-            "description" to comic.description,
-            "imageUrl" to comic.imageUrl,
-            "url" to comic.url,
-            "userId" to FirebaseAuth.getInstance().currentUser?.uid // Add the userId field
-        )
-
-        comicViewModel.comicsCollection.add(comicData)
-            .addOnSuccessListener { documentReference ->
-                // Comic added successfully
-                val comicId = documentReference.id
-                // Perform any additional actions or UI updates
-                Log.i("Firebase", comicId)
-            }
-            .addOnFailureListener { exception ->
-                // Handle the error
-                Log.i("Firebase", exception.toString())
-            }
     }
 }
