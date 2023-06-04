@@ -30,6 +30,7 @@ class ComicsViewModel : ViewModel() {
         comicsLiveData
     }
     val comicsByTitle = MutableLiveData<List<Comic>>()
+    val comicsSaved = MutableLiveData<List<Comic>>()
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun loadComics(
@@ -48,6 +49,10 @@ class ComicsViewModel : ViewModel() {
                 loadingState.postValue(false)
             }
         }
+    }
+
+    fun loadSavedComics() {
+
     }
 
     @OptIn(DelicateCoroutinesApi::class)
