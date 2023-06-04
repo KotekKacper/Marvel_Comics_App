@@ -3,6 +3,8 @@ package com.kgkk.marvelcomicsapp.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.kgkk.marvelcomicsapp.api.ApiResponse
 import com.kgkk.marvelcomicsapp.api.MarvelApi
 import com.kgkk.marvelcomicsapp.api.RetrofitHelper
@@ -16,6 +18,12 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class ComicsViewModel : ViewModel() {
+    val currentUser: MutableLiveData<FirebaseUser> by lazy {
+        MutableLiveData<FirebaseUser>().apply {
+            value = FirebaseAuth.getInstance().currentUser
+        }
+    }
+
     private val marvelApi: MarvelApi by lazy {
         RetrofitHelper.getInstance().create(MarvelApi::class.java)
     }

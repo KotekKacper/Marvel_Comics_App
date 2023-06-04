@@ -48,6 +48,10 @@ class SavedFragment : Fragment() {
             onSignInResult(res)
         }
 
+        comicViewModel.currentUser.observe(viewLifecycleOwner) {
+            binding.username.text = comicViewModel.currentUser.value?.email ?: getString(R.string.username_text)
+        }
+
         binding.login.setOnClickListener {
             // Choose authentication providers
             val providers = arrayListOf(
@@ -92,15 +96,14 @@ class SavedFragment : Fragment() {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
-            val user = FirebaseAuth.getInstance().currentUser
             Toast.makeText(this.context, "Logged in", Toast.LENGTH_SHORT).show()
-            binding.username.text = user?.email ?: getString(R.string.username_text)
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             Toast.makeText(this.context, "Login failed", Toast.LENGTH_SHORT).show()
         }
+        comicViewModel.currentUser.value = FirebaseAuth.getInstance().currentUser
     }
 
     override fun onDestroyView() {
