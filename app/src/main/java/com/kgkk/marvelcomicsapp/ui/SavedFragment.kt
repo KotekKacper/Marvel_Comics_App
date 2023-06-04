@@ -62,6 +62,8 @@ class SavedFragment : Fragment() {
                     }?.addOnCompleteListener {
                         comicViewModel.currentUser.value = FirebaseAuth.getInstance().currentUser
                         Toast.makeText(this.context, getString(R.string.log_out_text), Toast.LENGTH_SHORT).show()
+
+                        comicViewModel.getUserComics()
                     }
                 }
             } else {                                            // user isn't logged in
@@ -122,6 +124,7 @@ class SavedFragment : Fragment() {
             Toast.makeText(this.context, getString(R.string.log_in_failed_text), Toast.LENGTH_SHORT).show()
         }
         comicViewModel.currentUser.value = FirebaseAuth.getInstance().currentUser
+        comicViewModel.getUserComics()
     }
 
     override fun onDestroyView() {

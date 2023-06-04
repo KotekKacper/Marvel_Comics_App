@@ -169,10 +169,12 @@ class ComicsViewModel : ViewModel() {
                     Log.d("Firebase", "Comics saved")
                 }
                 .addOnFailureListener { exception ->
+                    comicsSaved.postValue(emptyList())
                     Log.d("Firebase", exception.toString())
                 }
         } else {
             // User is not authenticated
+            comicsSaved.postValue(emptyList())
             Log.d("Firebase", "User is not authenticated")
         }
     }
