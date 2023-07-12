@@ -1,10 +1,10 @@
 # Marvel Comics App
 
-The Marvel Comics App is an Android application that utilizes the Marvel API (https://developer.marvel.com/) to provide users with access to a wide range of comics information. It offers a user-friendly interface and incorporates various features for easy searching and browsing.
+The Marvel Comics App is an Android application that utilizes the Marvel API (https://developer.marvel.com/) to provide users with access to a wide range of comics information. It offers a user-friendly interface and incorporates various features for easy searching and browsing as well as saving favourite comics.
 
 ## Architecture
 
-The app is developed using Kotlin and follows the MVVM (Model-View-ViewModel) design pattern, ensuring a robust and maintainable codebase. It leverages LiveData to facilitate seamless data updates. For handling asynchronous tasks, coroutines are employed, enabling efficient background processing.
+The app is developed using Kotlin and follows the MVVM (Model-View-ViewModel) and Dependency Injection (using Hilt library) design patterns, ensuring a robust and maintainable codebase. It leverages LiveData to facilitate seamless data updates. For handling asynchronous tasks, coroutines are employed, enabling efficient background processing.
 
 ## Key Features
 
@@ -22,25 +22,32 @@ The Marvel Comics App boasts the following noteworthy features:
 
 - Responsive Design: The app is designed to work seamlessly in both portrait and horizontal modes, as well as on tablets, providing a consistent and adaptable user interface across various device orientations and sizes.
 
+- Firebase integration: The app supports firebase for saving comics online.
+
 ## Third-Party Libraries
 
 Marvel Comics App integrates the following third-party libraries:
 
-- Retrofit (version 2.9.0) and Converter-Gson (version 2.9.0): Communication with the Marvel API.
+- Retrofit and Converter-Gson: Communication with the Marvel API.
 
-- Glide (version 4.12.0): Loading and displaying images from URLs.
+- Glide: Loading and displaying images from URLs.
+
+- Firebase: Authentication and online data storage.
+
+- Hilt: Dependecy Injection
 
 ## Gallery
 <p align="center">
-  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/b85bcaad-1162-4ef8-b5a0-2377b3cfd3d2" alt="MC-home" width="250">
+  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/3ff2951c-365a-430a-8303-89530af62e59" alt="MC-home" width="250">
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/ea0fec5c-2cfe-423f-a227-a8e2d7d70e3c" alt="MC-search" width="250">
+  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/63e36c97-04f4-4980-96e7-3beca8d458fe" alt="MC-search" width="250">
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/e8760783-212c-488b-b239-0f71f6ea9cca" alt="MC-dark" width="250">
+  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/fecd23ce-980c-4608-8020-f012889b428c" alt="MC-saved" width="250">
 </p>
 
 <p align="center">
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/75c2c7fa-2d26-44a1-8a10-06f059dcf32f" alt="MC-responsive" width="500">
+  <img src="https://github.com/KotekKacper/Marvel_Comics_App/assets/71709842/40bd0dbc-77fa-45ee-ba59-f5ada760204d" alt="MC-responsive" width="500">
   &nbsp;&nbsp;&nbsp;
 </p>
+
