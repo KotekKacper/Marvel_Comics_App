@@ -35,6 +35,18 @@
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/Theme.MarvelComicsApp" />
 
+            <ImageButton
+                android:id="@+id/bookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:layout_gravity="end"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_baseline_bookmark_24dp"
+                android:contentDescription="@string/bookmark_icon" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

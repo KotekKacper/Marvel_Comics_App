@@ -14,7 +14,9 @@ import com.kgkk.marvelcomicsapp.databinding.FragmentHomeBinding
 import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 import com.kgkk.marvelcomicsapp.utils.Constants
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null

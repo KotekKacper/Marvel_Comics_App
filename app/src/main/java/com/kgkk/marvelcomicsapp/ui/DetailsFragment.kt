@@ -7,20 +7,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.kgkk.marvelcomicsapp.R
 import com.kgkk.marvelcomicsapp.databinding.FragmentDetailsBinding
 import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
 import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 import com.kgkk.marvelcomicsapp.utils.Constants
+import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var comicViewModel: ComicsViewModel
 
     private var comic: Comic? = null
 
@@ -37,6 +43,8 @@ class DetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        comicViewModel = ViewModelProvider(this)[ComicsViewModel::class.java]
 
         // Set up the toolbar
         val toolbar = binding.toolbar
@@ -56,9 +64,32 @@ class DetailsFragment : Fragment() {
             startActivity(viewIntent)
         }
 
+        comic?.let { comicViewModel.runIfComicSaved(it.id,
+            { setBookmarkComicSaved() }, { setBookmarkComicNotSaved() }) }
+
         setContent()
 
         return root
+    }
+
+    private fun setBookmarkComicSaved() {
+        binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.orange))
+        binding.bookmark.visibility = View.VISIBLE
+        // Remove the comic from saved
+        binding.bookmark.setOnClickListener {
+            comic?.let { it1 -> comicViewModel.removeComic(it1.id) }
+            setBookmarkComicNotSaved()
+        }
+    }
+
+    private fun setBookmarkComicNotSaved() {
+        binding.bookmark.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.grey))
+        binding.bookmark.visibility = View.VISIBLE
+        // Save the comic
+        binding.bookmark.setOnClickListener {
+            comic?.let { it1 -> comicViewModel.addComic(it1) }
+            setBookmarkComicSaved()
+        }
     }
 
     private fun setContent() {

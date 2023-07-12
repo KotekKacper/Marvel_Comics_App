@@ -3,26 +3,39 @@ package com.kgkk.marvelcomicsapp.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.kgkk.marvelcomicsapp.api.ApiResponse
+import com.kgkk.marvelcomicsapp.api.IApiComicHelper
 import com.kgkk.marvelcomicsapp.api.MarvelApi
-import com.kgkk.marvelcomicsapp.api.RetrofitHelper
+import com.kgkk.marvelcomicsapp.database.IDbComicHelper
 import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
 import com.kgkk.marvelcomicsapp.utils.Constants
-import kotlinx.coroutines.DelicateCoroutinesApi
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-class ComicsViewModel : ViewModel() {
-    private val marvelApi: MarvelApi by lazy {
-        RetrofitHelper.getInstance().create(MarvelApi::class.java)
-    }
+@HiltViewModel
+class ComicsViewModel @Inject constructor(
+    private val dbComicHelper: IDbComicHelper,
+    private val apiComicHelper: IApiComicHelper
+) : ViewModel() {
 
     private val _loadingState = MutableLiveData<Boolean>()
-    val loadingState: LiveData<Boolean> = _loadingState
+    private val marvelApi: MarvelApi by lazy {
+        apiComicHelper.getApi()
+    }
 
+    val loadingState: LiveData<Boolean> = _loadingState
+    val currentUser: MutableLiveData<FirebaseUser> by lazy {
+        MutableLiveData<FirebaseUser>().apply {
+            value = FirebaseAuth.getInstance().currentUser
+        }
+    }
     val comics: MutableLiveData<List<Comic>> by lazy {
         val comicsLiveData = MutableLiveData<List<Comic>>()
         _loadingState.value = true
@@ -30,14 +43,15 @@ class ComicsViewModel : ViewModel() {
         comicsLiveData
     }
     val comicsByTitle = MutableLiveData<List<Comic>>()
+    val comicsSaved = MutableLiveData<List<Comic>>()
 
-    @OptIn(DelicateCoroutinesApi::class)
+
     private fun loadComics(
         marvelApi: MarvelApi,
         loadingState: MutableLiveData<Boolean>,
         comicsLiveData: MutableLiveData<List<Comic>>
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = marvelApi.getComics()
                 val comics = convertResponseToModel(result)
@@ -50,10 +64,9 @@ class ComicsViewModel : ViewModel() {
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun searchComicsByTitle(title: String) {
         _loadingState.value = true
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = marvelApi.getComicsByTitle(title)
                 val comics = convertResponseToModel(result)
@@ -64,6 +77,22 @@ class ComicsViewModel : ViewModel() {
                 _loadingState.postValue(false)
             }
         }
+    }
+
+    fun runIfComicSaved(comicId: Long, lambdaFunction: () -> Unit, negativeLambdaFunction: () -> Unit) {
+        dbComicHelper.runIfComicSaved(comicId, lambdaFunction, negativeLambdaFunction)
+    }
+
+    fun addComic(comic: Comic) {
+        dbComicHelper.addComic(comic)
+    }
+
+    fun removeComic(comicId: Long) {
+        dbComicHelper.removeComic(comicId)
+    }
+
+    fun getUserComics() {
+        dbComicHelper.updateUserComics(comicsSaved)
     }
 
     private fun convertResponseToModel(response: Response<ApiResponse>): List<Comic> {
