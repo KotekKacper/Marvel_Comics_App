@@ -1,10 +1,12 @@
 package com.kgkk.marvelcomicsapp.utils
 
+import com.kgkk.marvelcomicsapp.BuildConfig
+
 object Constants {
 //    Api
     const val TIMESTAMP = "1"
-    const val APIKEY = "080a502746c8a60aeab043387a56eef0"
-    const val HASH = "6edc18ab1a954d230c1f03c590d469d2"
+    const val APIKEY = BuildConfig.MarvelApiKey
+    const val HASH = BuildConfig.MarvelHash
     const val LIMIT = 25
     const val OFFSET = 0
     const val ORDERBY = "-onsaleDate"
