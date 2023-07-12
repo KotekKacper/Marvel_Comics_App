@@ -64,7 +64,7 @@ class DetailsFragment : Fragment() {
         }
 
         comic?.let { comicViewModel.runIfComicSaved(it.id,
-            { setBookmarkComicNotSaved() }, { setBookmarkComicSaved() }) }
+            { setBookmarkComicSaved() }, { setBookmarkComicNotSaved() }) }
 
         setContent()
 
