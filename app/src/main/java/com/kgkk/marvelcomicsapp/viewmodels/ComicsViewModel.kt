@@ -6,24 +6,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.kgkk.marvelcomicsapp.database.FirebaseDbComicHelper
 import com.kgkk.marvelcomicsapp.api.ApiResponse
+import com.kgkk.marvelcomicsapp.api.IApiComicHelper
 import com.kgkk.marvelcomicsapp.api.MarvelApi
-import com.kgkk.marvelcomicsapp.api.RetrofitHelper
+import com.kgkk.marvelcomicsapp.database.IDbComicHelper
 import com.kgkk.marvelcomicsapp.models.Author
 import com.kgkk.marvelcomicsapp.models.Comic
 import com.kgkk.marvelcomicsapp.utils.Constants
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-class ComicsViewModel : ViewModel() {
+@HiltViewModel
+class ComicsViewModel @Inject constructor(
+    private val dbComicHelper: IDbComicHelper,
+    private val apiComicHelper: IApiComicHelper
+) : ViewModel() {
 
     private val _loadingState = MutableLiveData<Boolean>()
     private val marvelApi: MarvelApi by lazy {
-        RetrofitHelper.getInstance().create(MarvelApi::class.java)
+        apiComicHelper.getApi()
     }
-    private val dbComicHelper = FirebaseDbComicHelper()
 
     val loadingState: LiveData<Boolean> = _loadingState
     val currentUser: MutableLiveData<FirebaseUser> by lazy {

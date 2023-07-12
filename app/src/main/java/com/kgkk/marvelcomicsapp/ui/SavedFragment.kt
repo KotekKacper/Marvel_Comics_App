@@ -20,7 +20,9 @@ import com.kgkk.marvelcomicsapp.databinding.FragmentSavedBinding
 import com.kgkk.marvelcomicsapp.utils.ComicSerialization
 import com.kgkk.marvelcomicsapp.utils.Constants
 import com.kgkk.marvelcomicsapp.viewmodels.ComicsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SavedFragment : Fragment() {
 
     private var _binding: FragmentSavedBinding? = null

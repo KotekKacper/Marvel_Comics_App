@@ -4,13 +4,14 @@ import com.kgkk.marvelcomicsapp.utils.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitHelper : IApiComicHelper {
+class RetrofitHelper : IApiComicHelper {
 
-    private const val baseUrl = Constants.BASE_GATEWAY_URL
+    private val baseUrl = Constants.BASE_GATEWAY_URL
 
-    override fun getInstance(): Retrofit {
+    override fun getApi(): MarvelApi {
         return Retrofit.Builder().baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+            .create(MarvelApi::class.java)
     }
 }
